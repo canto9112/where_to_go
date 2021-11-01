@@ -1,7 +1,8 @@
-from django.shortcuts import render
-from .models import Place
 from django.http import JsonResponse
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, render
+from django.urls import reverse
+
+from .models import Place
 
 
 def serialize_place(place):
@@ -17,7 +18,7 @@ def serialize_place(place):
                 "properties": {
                     "title": place.title,
                     "placeId": place.pk,
-                    "detailsUrl": ""
+                    "detailsUrl": reverse('get_detailsUrl', args=[place.pk])
                 }
             }]
     }
@@ -31,10 +32,11 @@ def index(request):
     return render(request, "index.html", context)
 
 
-def get_place_id(request, place_id):
+def get_detailsUrl(request, place_id):
     current_place = get_object_or_404(Place, pk=place_id)
     image_place = current_place.images.all()
     image_urls = [place_image.image.url for place_image in image_place]
+
     response_data = {
         'title': current_place.title,
         'imgs': image_urls,
@@ -44,9 +46,7 @@ def get_place_id(request, place_id):
         'coordinates': {
             'lat': current_place.lat,
             'lng': current_place.lng
-
         }
     }
-
     return JsonResponse(response_data, safe=False, json_dumps_params={'ensure_ascii': False,
                                                                       'indent': 2})

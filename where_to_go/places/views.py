@@ -15,7 +15,7 @@ def serialize_place(place):
           "properties": {
             "title": place.title,
             "placeId": place.pk,
-            "detailsUrl": "/static/json/roofs24.json"
+            "detailsUrl": ""
           }
         }]
     }
@@ -27,3 +27,11 @@ def index(request):
         'all_places': [serialize_place(place) for place in all_places]
     }
     return render(request, "index.html", context)
+
+
+def get_place_id(request, place_id):
+    current_place = Place.objects.get(pk=place_id)
+    context = {
+        'current_place': current_place
+    }
+    return render(request, "place.html", context)

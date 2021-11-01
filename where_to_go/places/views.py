@@ -33,9 +33,11 @@ def index(request):
 
 def get_place_id(request, place_id):
     current_place = get_object_or_404(Place, pk=place_id)
-
+    image_place = current_place.images.all()
+    image_urls = [place_image.image.url for place_image in image_place]
     response_data = {
         'title': current_place.title,
+        'imgs': image_urls,
         'lat': current_place.lat,
         'description_short': current_place.description_short,
         'description_long': current_place.description_long,

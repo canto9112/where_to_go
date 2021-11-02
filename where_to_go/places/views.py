@@ -42,7 +42,7 @@ def get_detailsUrl(request, place_id):
         'imgs': image_urls,
         'lat': current_place.lat,
         'description_short': current_place.description_short,
-        'description_long': current_place.description_long,
+        'description_long': current_place.content,
         'coordinates': {
             'lat': current_place.lat,
             'lng': current_place.lng
